@@ -42,17 +42,6 @@ public class BlogService {
 
     public void deleteBlog(int blogId){
         //delete blog and corresponding images
-        Blog blog=blogRepository1.findById(blogId).get();
-
-        //Getting user
-        User user=blog.getUser();
-        List<Blog> currentBlog=user.getBlogList();
-
-        //Removing Blog
-        currentBlog.remove(blog);
-        user.setBlogList(currentBlog);
-
-        //Saving in User will reflect in blog as bidirectional mapping
-        userRepository1.save(user);
+       blogRepository1.deleteById(blogId);
     }
 }
