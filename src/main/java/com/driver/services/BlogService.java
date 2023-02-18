@@ -23,11 +23,36 @@ public class BlogService {
 
     public Blog createAndReturnBlog(Integer userId, String title, String content) {
         //create a blog at the current time
+        Blog blog=new Blog();
+        blog.setTitle(title);
+        blog.setContent(content);
+        blog.setPubDate(new Date());
 
+        User user=userRepository1.findById(userId).get();
+        blog.setUser(user);
+
+        List<Blog> blogList=user.getBlogList();
+        blogList.add(blog);
+        user.setBlogList(blogList);
+
+        userRepository1.save(user);
+
+        return blog;
     }
 
     public void deleteBlog(int blogId){
         //delete blog and corresponding images
+        Blog blog=blogRepository1.findById(blogId).get();
 
+        //Getting user
+        User user=blog.getUser();
+        List<Blog> currentBlog=user.getBlogList();
+
+        //Removing Blog
+        currentBlog.remove(blog);
+        user.setBlogList(currentBlog);
+
+        //Saving in User will reflect in blog as bidirectional mapping
+        userRepository1.save(user);
     }
 }
